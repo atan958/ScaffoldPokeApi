@@ -27,14 +27,9 @@ namespace CallExternalApi
         {
             var hanidexDbHelper = new HanidexDbHelper();
 
-            var pokemonMovesList = await pokeApiHelper.RetrievePokemonMovesList();
 
-            var pokemonMoveInfoTasks = pokemonMovesList.Select(move =>
-            {
-                var moveInfoTask = pokeApiHelper.RetrievePokemonMoveInfo(move);
-                return moveInfoTask;
-            });
-            var pokemonMoveInfoList = await Task.WhenAll(pokemonMoveInfoTasks);
+            var pokemonMoveInfoList = await pokeApiHelper.RetrievePokemonMoveInfoList();
+
             pokemonMoveInfoList.ToList().ForEach(moveInfo =>
             {
                 hanidexDbHelper.InsertMoveInfo(moveInfo);

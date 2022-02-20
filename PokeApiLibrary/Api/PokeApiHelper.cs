@@ -1,6 +1,7 @@
 ﻿using PokeApiLibrary.Models;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -36,7 +37,8 @@ namespace PokeApiLibrary.Api
             
             var pokemonSpeciesInfoTasks = pokemonSpeciesList.Select((pokemonSpecies) =>
             {
-                return RetrievePokemonSpeciesInfo(pokemonSpecies);
+                var speciesInfoTask = RetrievePokemonSpeciesInfo(pokemonSpecies);
+                return speciesInfoTask;
             });
 
             var pokemonSpeciesInfoList = await Task.WhenAll(pokemonSpeciesInfoTasks);
@@ -57,13 +59,36 @@ namespace PokeApiLibrary.Api
         {
             using var response = await ApiClient.GetAsync(pokemonSpecies.Url);
 
-            return await response.Content.ReadAsAsync<PokemonSpeciesInfo>();
+            var content = await response.Content.ReadAsAsync<PokemonSpeciesInfo>();
+
+            return content;
         }
+
 
         /*
          * Another method which does a similar thing
          */
-        public async Task<List<PokemonMove>> RetrievePokemonMovesList()
+        public async Task<List<PokemonMoveInfo>> RetrievePokemonMoveInfoList()
+        {
+            var pokemonMovesList = await RetrievePokemonMovesList();
+
+            var pokemonMoveInfoTasks = pokemonMovesList.Select(move =>
+            {
+                var moveInfoTask = RetrievePokemonMoveInfo(move);
+                return moveInfoTask;
+            });
+
+            var pokemonMoveInfoList = await Task.WhenAll(pokemonMoveInfoTasks);
+
+            pokemonMoveInfoList.ToList().ForEach(move =>
+            {
+                Console.WriteLine(GetTypeIdByTypeUrl(move.Type.Url));
+            });
+           
+            return pokemonMoveInfoList.ToList();
+        }
+
+        private async Task<List<PokemonMove>> RetrievePokemonMovesList()
         {
             using var response = await ApiClient.GetAsync(_pokemonMovesUrl);
 
@@ -72,13 +97,23 @@ namespace PokeApiLibrary.Api
             return content.Results;
         }
 
-        public async Task<PokemonMoveInfo> RetrievePokemonMoveInfo(PokemonMove pokemonMove)
+        private async Task<PokemonMoveInfo> RetrievePokemonMoveInfo(PokemonMove pokemonMove)
         {
             using var response = await ApiClient.GetAsync(pokemonMove.Url);
 
             var content = await response.Content.ReadAsAsync<PokemonMoveInfo>();
 
             return content;
+        }
+
+        private int? GetTypeIdByTypeUrl(string typeUrl)
+        {
+            var startIndex = _pokemonTypesUrl.Length + 1;
+            var endIndex = (typeUrl.Length - 1) - startIndex;
+            var tryTypeId = typeUrl.Substring(startIndex, endIndex);
+            var isValidTypeId = Int32.TryParse(tryTypeId, out int typeId);
+
+            return (isValidTypeId) ? typeId : null;
         }
 
         /*
@@ -89,7 +124,6 @@ namespace PokeApiLibrary.Api
             using var response = await ApiClient.GetAsync(_pokemonTypesUrl);
 
             var content = await response.Content.ReadAsAsync<PokemonTypesList>();
-
 
             return content.Results;
         }
