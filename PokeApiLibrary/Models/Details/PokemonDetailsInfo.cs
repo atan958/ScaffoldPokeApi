@@ -14,6 +14,7 @@ namespace PokeApiLibrary.Models.Details
         public List<DetailsAbility> Abilities { get; set; }
         public List<DetailsStat> Stats { get; set; }
         public List<DetailsType> Types { get; set; }
+        public List<DetailsMove> Moves { get; set; }
         public int Height { get; set; }
         public int Weight { get; set; }
     }
@@ -48,6 +49,17 @@ namespace PokeApiLibrary.Models.Details
     }
 
     public class TypeType 
+    {
+        public string Name { get; set; }
+        public string Url { get; set; }
+    }
+
+    public class DetailsMove
+    {
+        public MoveMove Move { get; set; }
+    }
+
+    public class MoveMove
     {
         public string Name { get; set; }
         public string Url { get; set; }

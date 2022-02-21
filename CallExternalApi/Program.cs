@@ -19,11 +19,13 @@ namespace CallExternalApi
         static async Task Main(string[] args)
         {
             var pokeApiHelper = new PokeApiHelper();
+
             //await pokeApiHelper.TransferPokemonSpeciesData();
             //await pokeApiHelper.TransferPokemonTypesData();
             //await pokeApiHelper.TransferPokemonMovesData();
-            //await pokeApiHelper.TransferPokemonSpeciesPokemonMovesJoinData();
-            await pokeApiHelper.TransferPokemonDetailsData();
+
+            await pokeApiHelper.TransferPokemonDetailsPokemonMovesJoinData();
+            //await pokeApiHelper.TransferPokemonDetailsData();
         }
     }
 }

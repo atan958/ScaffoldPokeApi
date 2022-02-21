@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PokeApiLibrary.Models;
+using PokeApiLibrary.Models.Details;
 using PokeApiLibrary.Models.Moves;
 using PokeApiLibrary.Models.Species;
 using PokeApiLibrary.Models.Types;
@@ -87,6 +88,24 @@ namespace HanidexDbLibrary.Utilities
             }
         }
 
+        public void InsertTypeInfo(PokemonType typeInfo)
+        {
+            var queryString = "INSERT INTO Types (Id, Name)\n" +
+                              $"VALUES ({typeInfo.Id}, N\'{ typeInfo.Name }\')";
+            try
+            {
+                using SqlConnection con = new(_connectionString);
+                SqlCommand cmd = new(queryString, con);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         /*
          *
          */
@@ -140,12 +159,12 @@ namespace HanidexDbLibrary.Utilities
             return typeId;
         }
 
-        public void InsertPokemonMoveJoin(PokemonSpecies species, PokemonMoveInfo moveInfo)
+        public void InsertPokemonMoveJoin(PokemonDetailsInfo detailsInfo, MoveMove move)
         {
-            var pokemonId = GetPokemonIdByPokemonName(species.Name);
+            var moveId = GetMoveIdByMoveName(move.Name);
 
             var queryString = "INSERT INTO PokemonMoves (Pokemon_Id, Move_Id)\n" +
-                              $"VALUES ({pokemonId}, {moveInfo.Id})";
+                              $"VALUES ({detailsInfo.Id}, {moveId})";
             try
             {
                 using SqlConnection con = new(_connectionString);
@@ -156,27 +175,36 @@ namespace HanidexDbLibrary.Utilities
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"PokemonMove: {species.Name} {moveInfo.Name} in InsertPokemonMoveJoin: {ex.Message}");
+                Console.WriteLine($"Error for PokemonDetailsInfo={detailsInfo.Name} & MoveMove={move.Name} in InsertPokemonMoveJoin: {ex.Message}");
             }
         }
 
-        public void InsertTypeInfo(PokemonType typeInfo)
+        public int? GetMoveIdByMoveName(string moveName)
         {
-            var queryString = "INSERT INTO Types (Id, Name)\n" +
-                              $"VALUES ({typeInfo.Id}, N\'{ typeInfo.Name }\')";
+            int? moveId = null;
+
+            var queryString = $"SELECT Id FROM Moves WHERE Name = \'{moveName}\'";
+            
             try
             {
                 using SqlConnection con = new(_connectionString);
                 SqlCommand cmd = new(queryString, con);
 
                 con.Open();
-                cmd.ExecuteNonQuery();
+                var rdr = cmd.ExecuteReader();
+                if (rdr.Read())
+                {
+                    moveId = Convert.ToInt32(rdr[0]);
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Error for MoveName={moveName} in GetMoveIdByMoveName: {ex.Message}");
             }
+
+            return moveId;
         }
+
 
         /*
          *  Acquires the Ids of all the Pokemon species stored in the Database

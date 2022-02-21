@@ -60,25 +60,29 @@ namespace CallExternalApi
                 Console.WriteLine("========================================");
                 move.Learned_By_Pokemon.ForEach(pokemon =>
                 {
-                    hanidexDbHelper.InsertPokemonMoveJoin(pokemon, move);
+                    //hanidexDbHelper.InsertPokemonMoveJoin(pokemon, move);
                 });
             });
         }
-        public static async Task TransferPokemonSpeciesPokemonMovesJoinData(this PokeApiHelper pokeApiHelper)
+        public static async Task TransferPokemonDetailsPokemonMovesJoinData(this PokeApiHelper pokeApiHelper)
         {
             var hanidexDbHelper = new HanidexDbHelper();
 
-            var pokemonMoveInfoList = await pokeApiHelper.RetrievePokemonMoveInfoList();
+            var pokemonIdList = hanidexDbHelper.GetPokemonIdList();
 
-            pokemonMoveInfoList.ForEach(move =>
+            var pokemonDetailsInfoList = await pokeApiHelper.RetrievePokemonDetailsInfoListSelected(pokemonIdList);
+
+            pokemonDetailsInfoList.ForEach(detailsInfo =>
             {
-                Console.WriteLine("========================================");
-                Console.WriteLine($"============={move.Name}=============");
-                Console.WriteLine("========================================");
-                move.Learned_By_Pokemon.ForEach(pokemon =>
+                Console.WriteLine($"Pokemon: {detailsInfo.Name}, #Moves: {detailsInfo.Moves.Count()}");
+                detailsInfo.Moves.ForEach(move =>
                 {
-                    hanidexDbHelper.InsertPokemonMoveJoin(pokemon, move);
+                    hanidexDbHelper.InsertPokemonMoveJoin(detailsInfo, move.Move );
                 });
+                //Console.WriteLine();
+                //Console.WriteLine(detailsInfo.Name);
+                //Console.WriteLine($"\t{String.Join(", ", moves)}");
+                //Console.WriteLine();
             });
         }
 
@@ -94,7 +98,14 @@ namespace CallExternalApi
 
             pokemonDetailsInfoList.ForEach(detailsInfo =>
             {
+                var moves = detailsInfo.Moves.Select(move =>
+                {
+                    return move.Move.Name;
+                });
+                Console.WriteLine();
                 Console.WriteLine(detailsInfo.Name);
+                Console.WriteLine($"\t{String.Join(", ", moves)}");
+                Console.WriteLine();
             });
         }
 

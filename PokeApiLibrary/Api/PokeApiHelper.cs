@@ -170,8 +170,8 @@ namespace PokeApiLibrary.Api
             return output;
         }
 
-        int startCount = 0;
-        int endCount = 0;
+        private int startCount = 0;
+        private int endCount = 0;
 
         private async Task<PokemonDetailsInfo> RetrievePokemonDetailsInfo(int speciesId)
         {
