@@ -147,6 +147,7 @@ namespace PokeApiLibrary.Api
             Console.WriteLine("Retrieving List of Pokemon Details Information");
 
             var listList = new List<List<PokemonDetailsInfo>>();
+
             for (var i = 0; i < 60; i++)
             {
                 var startIndex = i * 20;
@@ -169,6 +170,9 @@ namespace PokeApiLibrary.Api
             return output;
         }
 
+        int startCount = 0;
+        int endCount = 0;
+
         private async Task<PokemonDetailsInfo> RetrievePokemonDetailsInfo(int speciesId)
         {
             Console.WriteLine("Started " + startCount++);
@@ -180,74 +184,6 @@ namespace PokeApiLibrary.Api
             return content;
         }
 
-
-        /*
-         *
-         */
-        public async Task<List<PokemonDetailsInfo>> _RetrievePokemonDetailsInfoList()
-        {
-            var pokemonDetailsList = await RetrievePokemonDetailsList();
-
-            var pokemonDetailsInfoTasks = pokemonDetailsList.Select(pokemonDetails =>
-            {
-                var detailsInfoTask = RetrievePokemonDetailsInfo(pokemonDetails);
-                return detailsInfoTask;
-            }).ToList();
-
-            var pokemonDetailsInfoList = new List<PokemonDetailsInfo>();
-
-            int y = 1;
-            for (int i = 0; i < pokemonDetailsInfoTasks.Count(); i++)
-            {
-                var detailsInfo = await pokemonDetailsInfoTasks[i];
-                Console.WriteLine($"i is {i} and y * 100 is {y * 100}");
-                if (i == (y * 100))
-                {
-                    Console.WriteLine("WAITING"); 
-                    await Task.Delay(5000); y++; 
-                    Console.WriteLine("DONE WAITING");
-                }
-                
-                pokemonDetailsInfoList.Add(detailsInfo);
-            }
-
-            return pokemonDetailsInfoList;
-        }
-
-        private async Task<List<PokemonDetails>> RetrievePokemonDetailsList()
-        {
-            using var response = await ApiClient.GetAsync(_pokemonDetailsUrl);
-
-            var content = await response.Content.ReadAsAsync<PokemonDetailsList>();
-
-            return content.Results;
-        }
-
-        private int startCount = 0;
-        private int endCount = 0;
-        private int x = 1;
-
-        private async Task<PokemonDetailsInfo> RetrievePokemonDetailsInfo(PokemonDetails pokemonDetails)
-        {
-            //if (startCount>(x*200))
-            //{
-            //    while (endCount< (x * 200 -10))
-            //    {
-            //        Task.Delay(5000);
-            //    }
-
-            //    x++;
-            //}
-
-            Console.WriteLine($"Started {startCount++}");
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13;
-            using var response = await ApiClient.GetAsync(pokemonDetails.Url);
-
-            var content = await response.Content.ReadAsAsync<PokemonDetailsInfo>();
-            Console.WriteLine($"Completed {endCount++}");
-
-            return content;
-        }
     }
 }
 
