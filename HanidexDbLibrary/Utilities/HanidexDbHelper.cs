@@ -69,9 +69,101 @@ namespace HanidexDbLibrary.Utilities
         {
             var accuracy = (moveInfo.Accuracy is null) ? "NULL" : moveInfo.Accuracy.ToString();
             var power = (moveInfo.Power is null) ? "NULL" : moveInfo.Power.ToString();
+            var pp = (moveInfo.Pp is null) ? "NULL" : moveInfo.Pp.ToString();
 
-            var queryString = "INSERT INTO Moves (Id, Name, Accuracy, Power, PP)\n" +
-                              $"VALUES ({ moveInfo.Id }, N\'{ moveInfo.Name }\', { accuracy}, { power }, { moveInfo.Pp })";
+            var queryString = "INSERT INTO Moves (Id, Type_Id, Name, Accuracy, Power, PP)\n" +
+                              $"VALUES ({ moveInfo.Id }, {moveInfo.Type.Id}, N\'{ moveInfo.Name }\', { accuracy}, { power }, { pp })";
+            try
+            {
+                using SqlConnection con = new(_connectionString);
+                SqlCommand cmd = new(queryString, con);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ moveInfo.Name } in InsertMoveInfo: { ex.Message }");
+            }
+        }
+
+        /*
+         *
+         */
+        public void InsertPokemonMoveJoin1(PokemonSpecies species, PokemonMoveInfo moveInfo)
+        {
+            var pokemonId = GetPokemonIdByPokemonName(species.Name);
+
+            var queryString = "INSERT INTO PokemonMoves (Pokemon_Id, Move_Id)\n" +
+                              $"VALUES ({pokemonId}, {moveInfo.Id})";
+            try
+            {
+                using SqlConnection con = new(_connectionString);
+                SqlCommand cmd = new(queryString, con);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"PokemonMove: {species.Name} {moveInfo.Name} in InsertPokemonMoveJoin: {ex.Message}");
+            }
+        }
+
+        /*
+         *  Helper Method: 
+         */
+        private string GetPokemonIdByPokemonName(string pokemonName)
+        {
+            var typeId = "0";
+
+            var queryString = "SELECT Id FROM Pokemon\n" + 
+                              $"WHERE Name = '{pokemonName}'";
+            try
+            {
+                using SqlConnection con = new(_connectionString);
+                SqlCommand cmd = new(queryString, con);
+
+                con.Open();
+                var rdr = cmd.ExecuteReader();
+                if (rdr.Read())
+                {
+                    Console.WriteLine(rdr[0]);
+                    typeId = Convert.ToString(rdr[0]);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Pokemon: {pokemonName} in GetPokemonIdByPokemonName: {ex.Message}");
+            }
+
+            return typeId;
+        }
+
+        public void InsertPokemonMoveJoin(PokemonSpecies species, PokemonMoveInfo moveInfo)
+        {
+            var pokemonId = GetPokemonIdByPokemonName(species.Name);
+
+            var queryString = "INSERT INTO PokemonMoves (Pokemon_Id, Move_Id)\n" +
+                              $"VALUES ({pokemonId}, {moveInfo.Id})";
+            try
+            {
+                using SqlConnection con = new(_connectionString);
+                SqlCommand cmd = new(queryString, con);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"PokemonMove: {species.Name} {moveInfo.Name} in InsertPokemonMoveJoin: {ex.Message}");
+            }
+        }
+
+        public void InsertTypeInfo(PokemonType typeInfo)
+        {
+            var queryString = "INSERT INTO Types (Id, Name)\n" +
+                              $"VALUES ({typeInfo.Id}, N\'{ typeInfo.Name }\')";
             try
             {
                 using SqlConnection con = new(_connectionString);
@@ -86,12 +178,17 @@ namespace HanidexDbLibrary.Utilities
             }
         }
 
-        public string GetTypeIdByTypeName(string typeName)
+        /*
+         *  Acquires the Ids of all the Pokemon species stored in the Database
+         */
+        public List<int> GetPokemonIdList()
         {
-            var typeId = "";
+            Console.WriteLine("Getting List of Pokemon Ids");
 
-            var queryString = "SELECT Id FROM Types\n" + 
-                              $"WHERE Name = '{typeName}'";
+            var pokemonIdList = new List<int>();
+
+            var queryString = "SELECT Id FROM Pokemon";
+
             try
             {
                 using SqlConnection con = new(_connectionString);
@@ -101,7 +198,8 @@ namespace HanidexDbLibrary.Utilities
                 var rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
-                    Console.WriteLine(rdr[0]);
+                    var pokemonId = Convert.ToInt32(rdr[0]);
+                    pokemonIdList.Add(pokemonId);
                 }
             }
             catch (Exception ex)
@@ -109,25 +207,7 @@ namespace HanidexDbLibrary.Utilities
                 Console.WriteLine(ex.Message);
             }
 
-            return typeId;
-        }
-
-        public void InsertTypeInfo(PokemonType typeInfo)
-        {
-            var queryString = "INSERT INTO Types (Name)\n" +
-                              $"VALUES (N\'{ typeInfo.Name }\')";
-            try
-            {
-                using SqlConnection con = new(_connectionString);
-                SqlCommand cmd = new(queryString, con);
-
-                con.Open();
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            return pokemonIdList;
         }
     }
 }

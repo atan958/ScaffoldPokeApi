@@ -27,7 +27,6 @@ namespace CallExternalApi
         {
             var hanidexDbHelper = new HanidexDbHelper();
 
-
             var pokemonMoveInfoList = await pokeApiHelper.RetrievePokemonMoveInfoList();
 
             pokemonMoveInfoList.ToList().ForEach(moveInfo =>
@@ -44,9 +43,61 @@ namespace CallExternalApi
 
             pokemonTypesList.ToList().ForEach((type) =>
             {
-                Console.WriteLine(type.Name);
                 hanidexDbHelper.InsertTypeInfo(type);
             });
         }
+
+        public static async Task _TransferPokemonSpeciesPokemonMovesJoinData(this PokeApiHelper pokeApiHelper)
+        {
+            var hanidexDbHelper = new HanidexDbHelper();
+
+            var pokemonMoveInfoList = await pokeApiHelper.RetrievePokemonMoveInfoList();
+
+            pokemonMoveInfoList.ForEach(move =>
+            {
+                Console.WriteLine("========================================");
+                Console.WriteLine($"============={move.Name}=============");
+                Console.WriteLine("========================================");
+                move.Learned_By_Pokemon.ForEach(pokemon =>
+                {
+                    hanidexDbHelper.InsertPokemonMoveJoin(pokemon, move);
+                });
+            });
+        }
+        public static async Task TransferPokemonSpeciesPokemonMovesJoinData(this PokeApiHelper pokeApiHelper)
+        {
+            var hanidexDbHelper = new HanidexDbHelper();
+
+            var pokemonMoveInfoList = await pokeApiHelper.RetrievePokemonMoveInfoList();
+
+            pokemonMoveInfoList.ForEach(move =>
+            {
+                Console.WriteLine("========================================");
+                Console.WriteLine($"============={move.Name}=============");
+                Console.WriteLine("========================================");
+                move.Learned_By_Pokemon.ForEach(pokemon =>
+                {
+                    hanidexDbHelper.InsertPokemonMoveJoin(pokemon, move);
+                });
+            });
+        }
+
+        public static async Task TransferPokemonDetailsData(this PokeApiHelper pokeApiHelper)
+        {
+            Console.WriteLine("Starting Transfer of Pokemon Details Data");
+
+            var hanidexDbHelper = new HanidexDbHelper();
+
+            var pokemonIdList = hanidexDbHelper.GetPokemonIdList();
+
+            var pokemonDetailsInfoList = await pokeApiHelper.RetrievePokemonDetailsInfoListSelected(pokemonIdList);
+
+            pokemonDetailsInfoList.ForEach(detailsInfo =>
+            {
+                Console.WriteLine(detailsInfo.Name);
+            });
+        }
+
+
     }
 }
