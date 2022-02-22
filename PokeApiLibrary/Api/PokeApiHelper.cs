@@ -77,7 +77,7 @@ namespace PokeApiLibrary.Api
 
 
         /*
-         * Another method which does a similar thing
+         * Method: Another method which does a similar thing
          */
         public async Task<List<PokemonMoveInfo>> RetrievePokemonMoveInfoList()
         {
@@ -109,7 +109,7 @@ namespace PokeApiLibrary.Api
         }
 
         /*
-         *
+         *  Helper: 
          */
         private async Task<PokemonMoveInfo> RetrievePokemonMoveInfo(PokemonMove pokemonMove)
         {
@@ -118,18 +118,6 @@ namespace PokeApiLibrary.Api
             var content = await response.Content.ReadAsAsync<PokemonMoveInfo>();
 
             return content;
-        }
-        /*
-         *  Helper: Acquires the Id of a Pokemon Type from its Url property
-         */
-        private int? GetTypeIdByTypeUrl(string typeUrl)
-        {
-            var startIndex = _pokemonTypesUrl.Length + 1;
-            var endIndex = (typeUrl.Length - 1) - startIndex;
-            var tryTypeId = typeUrl.Substring(startIndex, endIndex);
-            var isValidTypeId = int.TryParse(tryTypeId, out var typeId);
-
-            return (isValidTypeId) ? typeId : null;
         }
 
         /*
@@ -150,7 +138,20 @@ namespace PokeApiLibrary.Api
         }
 
         /*
-         *  Selected Pokemon Ids
+         *  Helper: Acquires the Id of a Pokemon Type from its Url property
+         */
+        private int? GetTypeIdByTypeUrl(string typeUrl)
+        {
+            var startIndex = _pokemonTypesUrl.Length + 1;
+            var endIndex = (typeUrl.Length - 1) - startIndex;
+            var tryTypeId = typeUrl.Substring(startIndex, endIndex);
+            var isValidTypeId = int.TryParse(tryTypeId, out var typeId);
+
+            return (isValidTypeId) ? typeId : null;
+        }
+
+        /*
+         *  Method: Acquires Details data from PokeApi for the given Pokemon Ids
          */
         public async Task<List<PokemonDetailsInfo>> RetrievePokemonDetailsInfoListSelected(List<int> pokemonSpeciesIdList)
         {
@@ -190,6 +191,9 @@ namespace PokeApiLibrary.Api
         private int startCount = 0;
         private int endCount = 0;
 
+        /*
+         *
+         */
         private async Task<PokemonDetailsInfo> RetrievePokemonDetailsInfo(int speciesId)
         {
             Console.WriteLine("Started " + startCount++);
@@ -201,7 +205,9 @@ namespace PokeApiLibrary.Api
             return content;
         }
 
-
+        /*
+         *
+         */
     }
 }
 

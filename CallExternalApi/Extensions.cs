@@ -82,7 +82,7 @@ namespace CallExternalApi
             });
         }
 
-        public static async Task TransferPokemonDetailsData(this PokeApiHelper pokeApiHelper)
+        public static async Task _TransferPokemonDetailsData(this PokeApiHelper pokeApiHelper)
         {
             Console.WriteLine("Starting Transfer of Pokemon Details Data");
 
@@ -124,6 +124,13 @@ namespace CallExternalApi
                 });
 
             });
+        }
+
+        public static async Task TransferPokemonAbilitiesData(this PokeApiHelper pokeApiHelper)
+        {
+            var hanidexDbHelper = new HanidexDbHelper();
+
+
         }
     }
 }
