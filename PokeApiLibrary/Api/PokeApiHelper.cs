@@ -103,6 +103,9 @@ namespace PokeApiLibrary.Api
             return content.Results;
         }
 
+        /*
+         *
+         */
         private async Task<PokemonMoveInfo> RetrievePokemonMoveInfo(PokemonMove pokemonMove)
         {
             using var response = await ApiClient.GetAsync(pokemonMove.Url);
@@ -111,7 +114,9 @@ namespace PokeApiLibrary.Api
 
             return content;
         }
-
+        /*
+         *  Helper: Acquires the Id of a Pokemon Type from its Url property
+         */
         private static int? GetTypeIdByTypeUrl(string typeUrl)
         {
             var startIndex = _pokemonTypesUrl.Length + 1;
@@ -123,7 +128,7 @@ namespace PokeApiLibrary.Api
         }
 
         /*
-         *  Another method which does a similar thing
+         *  Method: Acquires the Pokemon Types from the API
          */
         public async Task<List<PokemonType>> RetrievePokemonTypesList()
         {
@@ -174,6 +179,9 @@ namespace PokeApiLibrary.Api
             return outputDetailsInfoList;
         }
 
+        /*
+         *
+         */
         private int startCount = 0;
         private int endCount = 0;
 
@@ -187,6 +195,7 @@ namespace PokeApiLibrary.Api
             Console.WriteLine("Completed " + endCount++);
             return content;
         }
+
 
     }
 }

@@ -18,9 +18,13 @@ namespace HanidexDbLibrary.Utilities
 
         public HanidexDbHelper()
         {
-            _connectionString = @"Data Source=ANGELO\SQLEXPRESS;Initial Catalog=TrialHanidex;Integrated Security=True";
+            //            _connectionString = @"Data Source=ANGELO\SQLEXPRESS;Initial Catalog=TrialHanidex;Integrated Security=True";
+            _connectionString = @"Data Source=ANGELO\SQLEXPRESS;Initial Catalog=NewHanidex;Integrated Security=True";
         }
 
+        /*
+         *  Method:
+         */
         public void InsertPokemonInfo(PokemonSpeciesInfo pokemonSpeciesInfo)
         {
             var generation = GetGenerationNumber(pokemonSpeciesInfo.Generation.Name);
@@ -41,6 +45,9 @@ namespace HanidexDbLibrary.Utilities
             }
         }
 
+        /*
+         *  Helper: 
+         */
         private static int GetGenerationNumber(string pokemonGen)
         {
             return pokemonGen switch
@@ -57,6 +64,9 @@ namespace HanidexDbLibrary.Utilities
             };
         }
 
+        /*
+         *  Method:
+         */
         public void InsertMoveInfo(PokemonMoveInfo moveInfo)
         {
             var accuracy = (moveInfo.Accuracy is null) ? "NULL" : moveInfo.Accuracy.ToString();
@@ -79,6 +89,9 @@ namespace HanidexDbLibrary.Utilities
             }
         }
 
+        /*
+         *  Method:
+         */
         public void InsertTypeInfo(PokemonType typeInfo)
         {
             var queryString = "INSERT INTO Types (Id, Name)\n" +
@@ -98,7 +111,7 @@ namespace HanidexDbLibrary.Utilities
         }
 
         /*
-         *  Insert an entry to the PokemonMoves Table
+         *  Method: Insert an entry to the PokemonMoves Table
          */
         public void InsertPokemonMoveJoin(PokemonDetailsInfo detailsInfo, MoveMove move)
         {
@@ -120,6 +133,9 @@ namespace HanidexDbLibrary.Utilities
             }
         }
 
+        /*
+         *  Helper: 
+         */
         private int? GetMoveIdByMoveName(string moveName)
         {
             int? moveId = null;
@@ -146,9 +162,8 @@ namespace HanidexDbLibrary.Utilities
             return moveId;
         }
 
-
         /*
-         *  Acquires the Ids of all the Pokemon species stored in the Database
+         *  Method: Acquires the Ids of all the Pokemon species stored in the Database
          */
         public List<int> GetPokemonIdList()
         {
@@ -177,6 +192,58 @@ namespace HanidexDbLibrary.Utilities
             }
 
             return pokemonIdList;
+        }
+
+        /*
+         *  Method: Insert an entry to the PokemonMoves Table
+         */
+        public void InsertPokemonTypeJoin(PokemonDetailsInfo detailsInfo, TypeType type)
+        {
+            var typeId = GetTypeIdByTypeName(type.Name);
+
+            var queryString = "INSERT INTO PokemonTypes (Pokemon_Id, Type_Id)\n" +
+                              $"VALUES ({detailsInfo.Id}, {typeId})";
+            try
+            {
+                using SqlConnection con = new(_connectionString);
+                SqlCommand cmd = new(queryString, con);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error for Pokemon={detailsInfo.Name} & Type={type.Name} in InsertPokemonTypeJoin: {ex.Message}");
+            }
+        }
+
+        /*
+         *  Helper: 
+         */
+        private int? GetTypeIdByTypeName(string typeName)
+        {
+            int? typeId = null;
+
+            var queryString = $"SELECT Id FROM Types WHERE Name = \'{typeName}\'";
+
+            try
+            {
+                using SqlConnection con = new(_connectionString);
+                SqlCommand cmd = new(queryString, con);
+
+                con.Open();
+                var rdr = cmd.ExecuteReader();
+                if (rdr.Read())
+                {
+                    typeId = Convert.ToInt32(rdr[0]);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error for MoveName={typeName} in GetMoveIdByMoveName: {ex.Message}");
+            }
+
+            return typeId;
         }
     }
 }

@@ -98,13 +98,32 @@ namespace CallExternalApi
                 {
                     return move.Move.Name;
                 });
-                Console.WriteLine();
-                Console.WriteLine(detailsInfo.Name);
-                Console.WriteLine($"\t{String.Join(", ", moves)}");
-                Console.WriteLine();
+
             });
         }
 
+        /*
+         *
+         */
+        public static async Task TransferPokemonDetailsPokemonTypesJoinData(this PokeApiHelper pokeApiHelper)
+        {
+            Console.WriteLine("Starting Transfer");
+            var hanidexDbHelper = new HanidexDbHelper();
 
+            var pokemonIdList = hanidexDbHelper.GetPokemonIdList();
+
+            var pokemonDetailsInfoList = await pokeApiHelper.RetrievePokemonDetailsInfoListSelected(pokemonIdList);
+
+            pokemonDetailsInfoList.ForEach(detailsInfo =>
+            {
+                detailsInfo.Types.ForEach(type =>
+                {
+                    Console.WriteLine($"Inserting {detailsInfo.Name}, {type.Type.Name}");
+
+                    hanidexDbHelper.InsertPokemonTypeJoin(detailsInfo, type.Type);
+                });
+
+            });
+        }
     }
 }
