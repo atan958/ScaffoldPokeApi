@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using DemoLibrary;
 using HanidexDbLibrary.Utilities;
 using Newtonsoft.Json;
 using PokeApiLibrary.Api;

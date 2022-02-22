@@ -10,7 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DemoLibrary\DemoLibrary.csproj" />
     <ProjectReference Include="..\HanidexDbLibrary\HanidexDbLibrary.csproj" />
     <ProjectReference Include="..\PokeApiLibrary\PokeApiLibrary.csproj" />
   </ItemGroup>
