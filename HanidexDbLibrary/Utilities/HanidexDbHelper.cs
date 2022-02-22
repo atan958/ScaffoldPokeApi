@@ -107,58 +107,8 @@ namespace HanidexDbLibrary.Utilities
         }
 
         /*
-         *
+         *  Insert an entry to the PokemonMoves Table
          */
-        public void InsertPokemonMoveJoin1(PokemonSpecies species, PokemonMoveInfo moveInfo)
-        {
-            var pokemonId = GetPokemonIdByPokemonName(species.Name);
-
-            var queryString = "INSERT INTO PokemonMoves (Pokemon_Id, Move_Id)\n" +
-                              $"VALUES ({pokemonId}, {moveInfo.Id})";
-            try
-            {
-                using SqlConnection con = new(_connectionString);
-                SqlCommand cmd = new(queryString, con);
-
-                con.Open();
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"PokemonMove: {species.Name} {moveInfo.Name} in InsertPokemonMoveJoin: {ex.Message}");
-            }
-        }
-
-        /*
-         *  Helper Method: 
-         */
-        private string GetPokemonIdByPokemonName(string pokemonName)
-        {
-            var typeId = "0";
-
-            var queryString = "SELECT Id FROM Pokemon\n" + 
-                              $"WHERE Name = '{pokemonName}'";
-            try
-            {
-                using SqlConnection con = new(_connectionString);
-                SqlCommand cmd = new(queryString, con);
-
-                con.Open();
-                var rdr = cmd.ExecuteReader();
-                if (rdr.Read())
-                {
-                    Console.WriteLine(rdr[0]);
-                    typeId = Convert.ToString(rdr[0]);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Pokemon: {pokemonName} in GetPokemonIdByPokemonName: {ex.Message}");
-            }
-
-            return typeId;
-        }
-
         public void InsertPokemonMoveJoin(PokemonDetailsInfo detailsInfo, MoveMove move)
         {
             var moveId = GetMoveIdByMoveName(move.Name);
@@ -179,7 +129,7 @@ namespace HanidexDbLibrary.Utilities
             }
         }
 
-        public int? GetMoveIdByMoveName(string moveName)
+        private int? GetMoveIdByMoveName(string moveName)
         {
             int? moveId = null;
 
