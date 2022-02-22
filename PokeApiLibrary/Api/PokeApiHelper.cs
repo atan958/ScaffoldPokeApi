@@ -17,10 +17,10 @@ namespace PokeApiLibrary.Api
 {
     public class PokeApiHelper
     {
-        const string _pokemonSpeciesUrl = "https://pokeapi.co/api/v2/pokemon-species?limit=900";
-        const string _pokemonMovesUrl = "https://pokeapi.co/api/v2/move?limit=900";
-        const string _pokemonTypesUrl = "https://pokeapi.co/api/v2/type";
-        const string _pokemonDetailsUrl = "https://pokeapi.co/api/v2/pokemon";
+        private readonly string _pokemonSpeciesUrl;
+        private readonly string _pokemonMovesUrl;
+        private readonly string _pokemonTypesUrl;
+        private readonly string _pokemonDetailsUrl;
 
         public HttpClient ApiClient { get; set; }
 
@@ -32,6 +32,11 @@ namespace PokeApiLibrary.Api
             ApiClient = new HttpClient(clientHandler);
             ApiClient.DefaultRequestHeaders.Accept.Clear();
             ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            _pokemonSpeciesUrl = "https://pokeapi.co/api/v2/pokemon-species?limit=900";
+            _pokemonMovesUrl = "https://pokeapi.co/api/v2/move?limit=900";
+            _pokemonTypesUrl = "https://pokeapi.co/api/v2/type";
+            _pokemonDetailsUrl = "https://pokeapi.co/api/v2/pokemon";
         }
 
         /*
