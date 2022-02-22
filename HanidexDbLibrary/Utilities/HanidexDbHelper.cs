@@ -41,29 +41,20 @@ namespace HanidexDbLibrary.Utilities
             }
         }
 
-        private int GetGenerationNumber(string pokemonGen)
+        private static int GetGenerationNumber(string pokemonGen)
         {
-            switch (pokemonGen)
+            return pokemonGen switch
             {
-                case "generation-i":
-                    return 1;
-                case "generation-ii":
-                    return 2;
-                case "generation-iii":
-                    return 3;
-                case "generation-iv":
-                    return 4;
-                case "generation-v":
-                    return 5;
-                case "generation-vi":
-                    return 6;
-                case "generation-vii":
-                    return 7;
-                case "generation-viii":
-                    return 8;
-                default:
-                    return 0;
-            }
+                "generation-i" => 1,
+                "generation-ii" => 2,
+                "generation-iii" => 3,
+                "generation-iv" => 4,
+                "generation-v" => 5,
+                "generation-vi" => 6,
+                "generation-vii" => 7,
+                "generation-viii" => 8,
+                _ => 0,
+            };
         }
 
         public void InsertMoveInfo(PokemonMoveInfo moveInfo)

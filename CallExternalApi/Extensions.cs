@@ -74,15 +74,11 @@ namespace CallExternalApi
 
             pokemonDetailsInfoList.ForEach(detailsInfo =>
             {
-                Console.WriteLine($"Pokemon: {detailsInfo.Name}, #Moves: {detailsInfo.Moves.Count()}");
+                Console.WriteLine($"Pokemon: {detailsInfo.Name}, #Moves: {detailsInfo.Moves.Count}");
                 detailsInfo.Moves.ForEach(move =>
                 {
                     hanidexDbHelper.InsertPokemonMoveJoin(detailsInfo, move.Move );
                 });
-                //Console.WriteLine();
-                //Console.WriteLine(detailsInfo.Name);
-                //Console.WriteLine($"\t{String.Join(", ", moves)}");
-                //Console.WriteLine();
             });
         }
 

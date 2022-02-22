@@ -26,7 +26,7 @@ namespace PokeApiLibrary.Api
 
         public PokeApiHelper() 
         {
-            HttpClientHandler clientHandler = new HttpClientHandler();
+            HttpClientHandler clientHandler = new();
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
 
             ApiClient = new HttpClient(clientHandler);
@@ -112,7 +112,7 @@ namespace PokeApiLibrary.Api
             return content;
         }
 
-        private int? GetTypeIdByTypeUrl(string typeUrl)
+        private static int? GetTypeIdByTypeUrl(string typeUrl)
         {
             var startIndex = _pokemonTypesUrl.Length + 1;
             var endIndex = (typeUrl.Length - 1) - startIndex;
@@ -146,12 +146,16 @@ namespace PokeApiLibrary.Api
         {
             Console.WriteLine("Retrieving List of Pokemon Details Information");
 
-            var listList = new List<List<PokemonDetailsInfo>>();
+            const int numberOfCallsPerRun = 20;
 
-            for (var i = 0; i < 60; i++)
+            var totalNumberOfRuns = Math.Ceiling(Convert.ToDecimal(pokemonSpeciesIdList.Count)/numberOfCallsPerRun);
+            
+            var runsOutputsList = new List<List<PokemonDetailsInfo>>();
+
+            for (var i = 0; i < totalNumberOfRuns; i++)
             {
-                var startIndex = i * 20;
-                var endIndex = (((i + 1) * 20) > pokemonSpeciesIdList.Count()) ? pokemonSpeciesIdList.Count() : ((i + 1) * 20);
+                var startIndex = i * numberOfCallsPerRun;
+                var endIndex = (((i + 1) * numberOfCallsPerRun) > pokemonSpeciesIdList.Count) ? pokemonSpeciesIdList.Count : ((i + 1) * numberOfCallsPerRun);
                 var pokemonDetailsInfoTasks = new List<Task<PokemonDetailsInfo>>();
 
                 for (var j = startIndex; j < endIndex; j++)
@@ -161,13 +165,13 @@ namespace PokeApiLibrary.Api
                 }
 
                 var pokemonDetailsInfoList = (await Task.WhenAll(pokemonDetailsInfoTasks)).ToList();
-                listList.Add(pokemonDetailsInfoList);
+                runsOutputsList.Add(pokemonDetailsInfoList);
                 Console.WriteLine($"Completed Loops {i}");
             }
 
-            var output = listList.SelectMany(list => list).ToList();
+            var outputDetailsInfoList = runsOutputsList.SelectMany(list => list).ToList();
 
-            return output;
+            return outputDetailsInfoList;
         }
 
         private int startCount = 0;
