@@ -122,7 +122,7 @@ namespace PokeApiLibrary.Api
         /*
          *  Helper: Acquires the Id of a Pokemon Type from its Url property
          */
-        private static int? GetTypeIdByTypeUrl(string typeUrl)
+        private int? GetTypeIdByTypeUrl(string typeUrl)
         {
             var startIndex = _pokemonTypesUrl.Length + 1;
             var endIndex = (typeUrl.Length - 1) - startIndex;

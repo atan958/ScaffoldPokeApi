@@ -26,7 +26,7 @@ namespace CallExternalApi
 
             // Second Wave
             //await pokeApiHelper.TransferPokemonDetailsPokemonMovesJoinData();
-            await pokeApiHelper.TransferPokemonDetailsPokemonTypesJoinData();
+            //await pokeApiHelper.TransferPokemonDetailsPokemonTypesJoinData();
         }
     }
 }
