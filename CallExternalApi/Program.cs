@@ -23,6 +23,7 @@ namespace CallExternalApi
             //await pokeApiHelper.TransferPokemonSpeciesData();
             //await pokeApiHelper.TransferPokemonTypesData();
             //await pokeApiHelper.TransferPokemonMovesData();
+            await pokeApiHelper.TransferPokemonAbilitiesData();
 
             // Second Wave
             //await pokeApiHelper.TransferPokemonDetailsPokemonMovesJoinData();

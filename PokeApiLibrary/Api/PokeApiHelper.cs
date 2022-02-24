@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using PokeApiLibrary.Models.Abilities;
 using PokeApiLibrary.Models.Details;
 using PokeApiLibrary.Models.Moves;
 using PokeApiLibrary.Models.Species;
@@ -21,6 +22,7 @@ namespace PokeApiLibrary.Api
         private readonly string _pokemonMovesUrl;
         private readonly string _pokemonTypesUrl;
         private readonly string _pokemonDetailsUrl;
+        private readonly string _pokemonAbilitiesUrl;
 
         public HttpClient ApiClient { get; set; }
 
@@ -37,6 +39,7 @@ namespace PokeApiLibrary.Api
             _pokemonMovesUrl = "https://pokeapi.co/api/v2/move?limit=900";
             _pokemonTypesUrl = "https://pokeapi.co/api/v2/type";
             _pokemonDetailsUrl = "https://pokeapi.co/api/v2/pokemon";
+            _pokemonAbilitiesUrl = "https://pokeapi.co/api/v2/ability";
         }
 
         /*
@@ -208,8 +211,52 @@ namespace PokeApiLibrary.Api
         /*
          *
          */
+        public async Task<List<PokemonAbilityInfo>> RetrievePokemonAbilityInfoList()
+        {
+            var pokemonAbilityList = await RetrievePokemonAbilityList();
+
+            var pokemonAbilityInfoTasks = pokemonAbilityList.Select(ability =>
+            {
+                var pokemonAbilityInfo = RetrievePokemonAbilityInfo(ability);
+                return pokemonAbilityInfo;
+            }).ToList();
+
+            var pokemonAbilityInfoList = (await Task.WhenAll(pokemonAbilityInfoTasks)).ToList();
+
+            return pokemonAbilityInfoList;
+        }
+
+        public async Task<List<PokemonAbility>> RetrievePokemonAbilityList()
+        {
+            using var response = await ApiClient.GetAsync($"{_pokemonAbilitiesUrl}?limit=900");
+
+            var content = await response.Content.ReadAsAsync<PokemonAbilitiesList>();
+
+            return content.Results;
+        }
+
+        public async Task<PokemonAbilityInfo> RetrievePokemonAbilityInfo(PokemonAbility pokemonAbility)
+        {
+            using var response = await ApiClient.GetAsync(pokemonAbility.Url);
+
+            var content = await response.Content.ReadAsAsync<PokemonAbilityInfo>();
+
+            return content;
+        }
+
+        /*
+         *
+         */
+        private int? GetAbilityIdByIdUrl(string abilityUrl)
+        {
+            var startIndex = _pokemonAbilitiesUrl.Length + 1;
+            var endIndex = (abilityUrl.Length - 1) - startIndex;
+            var tryAbilityId = abilityUrl.Substring(startIndex, endIndex);
+            var isValidAbilityId = int.TryParse(tryAbilityId, out var abilityId);
+
+            return (isValidAbilityId) ? abilityId : null;
+        }
     }
 }
 
 //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-

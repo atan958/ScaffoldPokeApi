@@ -130,7 +130,14 @@ namespace CallExternalApi
         {
             var hanidexDbHelper = new HanidexDbHelper();
 
+            var pokemonAbilityInfoList = await pokeApiHelper.RetrievePokemonAbilityInfoList();
 
+            pokemonAbilityInfoList.ForEach(abilityInfo =>
+            {
+                Console.WriteLine($"({abilityInfo.Id}) {abilityInfo.Name}");
+                hanidexDbHelper.InsertAbilityInfo(abilityInfo);
+            });
+            Console.WriteLine($"\nTotal #Abilities: {pokemonAbilityInfoList.Count}");
         }
     }
 }

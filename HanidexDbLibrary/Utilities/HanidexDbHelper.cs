@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PokeApiLibrary.Models;
+using PokeApiLibrary.Models.Abilities;
 using PokeApiLibrary.Models.Details;
 using PokeApiLibrary.Models.Moves;
 using PokeApiLibrary.Models.Species;
@@ -244,6 +245,24 @@ namespace HanidexDbLibrary.Utilities
             }
 
             return typeId;
+        }
+
+        public void InsertAbilityInfo(PokemonAbilityInfo abilityInfo)
+        {
+            var queryString = "INSERT INTO Abilities (Id, Name)\n" +
+                              $"VALUES ({abilityInfo.Id}, N\'{ abilityInfo.Name }\')";
+            try
+            {
+                using SqlConnection con = new(_connectionString);
+                SqlCommand cmd = new(queryString, con);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in InsertAbilityInfo --> Ability Name: {abilityInfo.Name} --> {ex.Message}");
+            }
         }
     }
 }
