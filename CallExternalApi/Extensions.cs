@@ -39,11 +39,11 @@ namespace CallExternalApi
         {
             var hanidexDbHelper = new HanidexDbHelper();
 
-            var pokemonTypesList = await pokeApiHelper.RetrievePokemonTypesList();
+            var pokemonTypesList = await pokeApiHelper.RetrievePokemonTypeInfoList();
 
-            pokemonTypesList.ToList().ForEach((type) =>
+            pokemonTypesList.ToList().ForEach(typeInfo =>
             {
-                hanidexDbHelper.InsertTypeInfo(type);
+                hanidexDbHelper.InsertTypeInfo(typeInfo);
             });
         }
 
@@ -64,6 +64,7 @@ namespace CallExternalApi
                 });
             });
         }
+
         public static async Task TransferPokemonDetailsPokemonMovesJoinData(this PokeApiHelper pokeApiHelper)
         {
             var hanidexDbHelper = new HanidexDbHelper();

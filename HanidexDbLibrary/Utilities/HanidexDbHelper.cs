@@ -20,7 +20,7 @@ namespace HanidexDbLibrary.Utilities
         public HanidexDbHelper()
         {
             //            _connectionString = @"Data Source=ANGELO\SQLEXPRESS;Initial Catalog=TrialHanidex;Integrated Security=True";
-            _connectionString = @"Data Source=ANGELO\SQLEXPRESS;Initial Catalog=NewHanidex;Integrated Security=True";
+            _connectionString = @"Data Source=ANGELO\SQLEXPRESS;Initial Catalog=TryPokemonTypeAbility;Integrated Security=True";
         }
 
         /*
@@ -42,7 +42,7 @@ namespace HanidexDbLibrary.Utilities
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"InserPokemonInfo: {ex.Message}");
             }
         }
 
@@ -93,7 +93,7 @@ namespace HanidexDbLibrary.Utilities
         /*
          *  Method:
          */
-        public void InsertTypeInfo(PokemonType typeInfo)
+        public void InsertTypeInfo(PokemonTypeInfo typeInfo)
         {
             var queryString = "INSERT INTO Types (Id, Name)\n" +
                               $"VALUES ({typeInfo.Id}, N\'{ typeInfo.Name }\')";

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PokeApiLibrary.Models.Types
 {
-    public class PokemonType
+    public class PokemonTypeInfo
     {
+        public int Id { get; set; }
         public string Name { get; set; }
-        public string Url { get; set; }
     }
 }

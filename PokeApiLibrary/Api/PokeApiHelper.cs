@@ -102,6 +102,19 @@ namespace PokeApiLibrary.Api
             return pokemonMoveInfoList.ToList();
         }
 
+        /*
+         *  Helper: Acquires the Id of a Pokemon Type from its Url property
+         */
+        private int? GetTypeIdByTypeUrl(string typeUrl)
+        {
+            var startIndex = _pokemonTypesUrl.Length + 1;
+            var endIndex = (typeUrl.Length - 1) - startIndex;
+            var tryTypeId = typeUrl.Substring(startIndex, endIndex);
+            var isValidTypeId = int.TryParse(tryTypeId, out var typeId);
+
+            return (isValidTypeId) ? typeId : null;
+        }
+
         private async Task<List<PokemonMove>> RetrievePokemonMovesList()
         {
             using var response = await ApiClient.GetAsync(_pokemonMovesUrl);
@@ -126,31 +139,37 @@ namespace PokeApiLibrary.Api
         /*
          *  Method: Acquires the Pokemon Types from the API
          */
-        public async Task<List<PokemonType>> RetrievePokemonTypesList()
+        public async Task<List<PokemonTypeInfo>> RetrievePokemonTypeInfoList()
+        {
+            var pokemonTypeList = await RetrievePokemonTypeList();
+
+            var pokemonTypeInfoTasks = pokemonTypeList.Select(pokemonType =>
+            {
+                var typeInfoTask = RetrievePokemonTypeInfo(pokemonType);
+                return typeInfoTask;
+            });
+
+            var pokemonTypeInfoList = (await Task.WhenAll(pokemonTypeInfoTasks)).ToList();
+
+            return pokemonTypeInfoList;
+        }
+
+        private async Task<List<PokemonType>> RetrievePokemonTypeList()
         {
             using var response = await ApiClient.GetAsync(_pokemonTypesUrl);
 
             var content = await response.Content.ReadAsAsync<PokemonTypesList>();
 
-            content.Results.ForEach(type =>
-            {
-                type.Id = GetTypeIdByTypeUrl(type.Url);
-            });
-
             return content.Results;
         }
 
-        /*
-         *  Helper: Acquires the Id of a Pokemon Type from its Url property
-         */
-        private int? GetTypeIdByTypeUrl(string typeUrl)
+        public async Task<PokemonTypeInfo> RetrievePokemonTypeInfo(PokemonType pokemonType)
         {
-            var startIndex = _pokemonTypesUrl.Length + 1;
-            var endIndex = (typeUrl.Length - 1) - startIndex;
-            var tryTypeId = typeUrl.Substring(startIndex, endIndex);
-            var isValidTypeId = int.TryParse(tryTypeId, out var typeId);
+            using var response = await ApiClient.GetAsync(pokemonType.Url);
 
-            return (isValidTypeId) ? typeId : null;
+            var content = await response.Content.ReadAsAsync<PokemonTypeInfo>();
+
+            return content;
         }
 
         /*
