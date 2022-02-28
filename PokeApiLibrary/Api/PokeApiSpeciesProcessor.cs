@@ -8,16 +8,12 @@ using PokeApiLibrary.Models.Species;
 
 namespace PokeApiLibrary.Api
 {
-    public class PokeApiSpeciesProcessor
+    public class PokeApiSpeciesProcessor : PokeApiProcessor
     {
-        private HttpClient ApiClient { get; }
-
         private readonly string _pokemonSpeciesUrl;
 
         public PokeApiSpeciesProcessor(HttpClient client)
         {
-            ApiClient = client;
-
             _pokemonSpeciesUrl = "https://pokeapi.co/api/v2/pokemon-species?limit=900";
         }
 

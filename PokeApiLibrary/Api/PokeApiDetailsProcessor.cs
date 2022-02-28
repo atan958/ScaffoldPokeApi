@@ -11,8 +11,6 @@ namespace PokeApiLibrary.Api
 {
     public class PokeApiDetailsProcessor : PokeApiProcessor
     {
-        private HttpClient _ApiClient { get; set; }
-
         private readonly string _pokemonDetailsUrl;
 
         /*
@@ -23,8 +21,6 @@ namespace PokeApiLibrary.Api
 
         public PokeApiDetailsProcessor(HttpClient client)
         {
-            _ApiClient = client;
-
             _pokemonDetailsUrl = "https://pokeapi.co/api/v2/pokemon";
         }
 

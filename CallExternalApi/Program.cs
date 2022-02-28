@@ -20,13 +20,13 @@ namespace CallExternalApi
             var transferHelper = new PokemonDataTransferHelper();
 
             // First Wave
-            //await transferHelper.TransferPokemonMovesDataAsync();
-            //await transferHelper.TransferPokemonTypesDataAsync();
-            //await transferHelper.TransferPokemonSpeciesDataAsync();
-            //await transferHelper.TransferPokemonAbilitiesDataAsync();
+            await transferHelper.TransferPokemonTypesDataAsync();
+            await transferHelper.TransferPokemonMovesDataAsync();
+            await transferHelper.TransferPokemonSpeciesDataAsync();
+            await transferHelper.TransferPokemonAbilitiesDataAsync();
 
             // Second Wave 
-            // await transferHelper.TransferPokemonDetailsPokemonMovesJoinDataAsync();
+             await transferHelper.TransferPokemonDetailsPokemonMovesJoinDataAsync();
             await transferHelper.TransferPokemonDetailsPokemonTypesJoinDataAsync();
 
 

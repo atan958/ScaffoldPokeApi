@@ -8,16 +8,12 @@ using PokeApiLibrary.Models.Abilities;
 
 namespace PokeApiLibrary.Api
 {
-    public class PokeApiAbilitiesProcessor
+    public class PokeApiAbilitiesProcessor : PokeApiProcessor
     {
-        private HttpClient ApiClient { get; }
-
         private readonly string _pokemonAbilitiesUrl;
 
         public PokeApiAbilitiesProcessor(HttpClient client)
         {
-            ApiClient = client;
-
             _pokemonAbilitiesUrl = "https://pokeapi.co/api/v2/ability";
         }
 

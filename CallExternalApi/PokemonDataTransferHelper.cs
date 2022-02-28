@@ -43,6 +43,10 @@ namespace CallExternalApi
                 Console.WriteLine($"Db Insertion #{count++}");
                 DbHelper.InsertPokemonInfo(pokemonSpeciesInfo);
             });
+
+            Console.WriteLine("==================================================================");
+            Console.WriteLine($"======================== Pokemon Species ========================");
+            Console.WriteLine("==================================================================");
         }
 
         public async Task TransferPokemonMovesDataAsync()
@@ -58,6 +62,10 @@ namespace CallExternalApi
 
                 DbHelper.InsertMoveInfo(moveInfo);
             });
+
+            Console.WriteLine("==================================================================");
+            Console.WriteLine($"========================= Pokemon Moves =========================");
+            Console.WriteLine("==================================================================");
         }
 
         public async Task TransferPokemonTypesDataAsync()
@@ -68,6 +76,10 @@ namespace CallExternalApi
             {
                 DbHelper.InsertTypeInfo(typeInfo);
             });
+
+            Console.WriteLine("==================================================================");
+            Console.WriteLine($"========================= Pokemon Types =========================");
+            Console.WriteLine("==================================================================");
         }
 
         public async Task _TransferPokemonSpeciesPokemonMovesJoinDataAsync()
@@ -111,6 +123,10 @@ namespace CallExternalApi
                     DbHelper.InsertPokemonMoveJoin(detailsInfo, move.Move);
                 });
             });
+
+            Console.WriteLine("==================================================================");
+            Console.WriteLine($"========================= Details Moves =========================");
+            Console.WriteLine("==================================================================");
         }
 
         public async Task _TransferPokemonDetailsDataAsync()
@@ -152,6 +168,10 @@ namespace CallExternalApi
                 });
 
             });
+
+            Console.WriteLine("==================================================================");
+            Console.WriteLine($"========================= Details Types =========================");
+            Console.WriteLine("==================================================================");
         }
 
         public async Task TransferPokemonAbilitiesDataAsync()
@@ -164,6 +184,10 @@ namespace CallExternalApi
                 DbHelper.InsertAbilityInfo(abilityInfo);
             });
             Console.WriteLine($"\nTotal #Abilities: {pokemonAbilityInfoList.Count}");
+
+            Console.WriteLine("==================================================================");
+            Console.WriteLine($"========================= Pokemon Abilities =========================");
+            Console.WriteLine("==================================================================");
         }
     }
 }

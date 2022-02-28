@@ -8,16 +8,12 @@ using PokeApiLibrary.Models.Types;
 
 namespace PokeApiLibrary.Api
 {
-    public class PokeApiTypesProcessor
+    public class PokeApiTypesProcessor : PokeApiProcessor
     {
-        private HttpClient ApiClient { get; }
-
         private readonly string _pokemonTypesUrl;
 
         public PokeApiTypesProcessor(HttpClient client)
         {
-            ApiClient = client;
-
             _pokemonTypesUrl = "https://pokeapi.co/api/v2/type";
         }
 

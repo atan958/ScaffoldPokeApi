@@ -8,16 +8,12 @@ using PokeApiLibrary.Models.Moves;
 
 namespace PokeApiLibrary.Api
 {
-    public class PokeApiMovesProcessor
+    public class PokeApiMovesProcessor : PokeApiProcessor
     {
-        private HttpClient ApiClient { get; }
-
         private readonly string _pokemonMovesUrl;
 
         public PokeApiMovesProcessor(HttpClient client)
         {
-            ApiClient = client;
-
             _pokemonMovesUrl = "https://pokeapi.co/api/v2/move?limit=900";
         }
 
