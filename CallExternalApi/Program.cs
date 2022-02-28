@@ -17,11 +17,24 @@ namespace CallExternalApi
     {
         static async Task Main(string[] args)
         {
-            var pokeApiHelper = new PokeApiHelper();
-            
+            var transferHelper = new PokemonDataTransferHelper();
+
+            // First Wave
+            //await transferHelper.TransferPokemonMovesDataAsync();
+            //await transferHelper.TransferPokemonTypesDataAsync();
+            //await transferHelper.TransferPokemonSpeciesDataAsync();
+            //await transferHelper.TransferPokemonAbilitiesDataAsync();
+
+            // Second Wave 
+            // await transferHelper.TransferPokemonDetailsPokemonMovesJoinDataAsync();
+            await transferHelper.TransferPokemonDetailsPokemonTypesJoinDataAsync();
+
+
+            //var pokeApiHelper = new PokeApiHelper();
+
             // First Wave
             //await pokeApiHelper.TransferPokemonSpeciesData();
-            await pokeApiHelper.TransferPokemonTypesData();
+            //await pokeApiHelper.TransferPokemonTypesData();
             //await pokeApiHelper.TransferPokemonMovesData();
             //await pokeApiHelper.TransferPokemonAbilitiesData();
 

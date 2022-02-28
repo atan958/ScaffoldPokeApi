@@ -11,6 +11,7 @@ namespace CallExternalApi
 {
     public static class Extensions
     {
+        /*
         public static async Task TransferPokemonSpeciesData(this PokeApiHelper pokeApiHelper)
         {
             var hanidexDbHelper = new HanidexDbHelper();
@@ -103,9 +104,6 @@ namespace CallExternalApi
             });
         }
 
-        /*
-         *
-         */
         public static async Task TransferPokemonDetailsPokemonTypesJoinData(this PokeApiHelper pokeApiHelper)
         {
             Console.WriteLine("Starting Transfer");
@@ -140,5 +138,6 @@ namespace CallExternalApi
             });
             Console.WriteLine($"\nTotal #Abilities: {pokemonAbilityInfoList.Count}");
         }
+        */
     }
 }

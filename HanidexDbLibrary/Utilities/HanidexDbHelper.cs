@@ -73,9 +73,10 @@ namespace HanidexDbLibrary.Utilities
             var accuracy = (moveInfo.Accuracy is null) ? "NULL" : moveInfo.Accuracy.ToString();
             var power = (moveInfo.Power is null) ? "NULL" : moveInfo.Power.ToString();
             var pp = (moveInfo.Pp is null) ? "NULL" : moveInfo.Pp.ToString();
+            var typeId = (moveInfo.Type.Id is null) ? "NULL" : moveInfo.Type.Id.ToString();
 
             var queryString = "INSERT INTO Moves (Id, Type_Id, Name, Accuracy, Power, PP)\n" +
-                              $"VALUES ({ moveInfo.Id }, {moveInfo.Type.Id}, N\'{ moveInfo.Name }\', { accuracy}, { power }, { pp })";
+                              $"VALUES ({ moveInfo.Id }, { typeId }, N\'{ moveInfo.Name }\', { accuracy}, { power }, { pp })";
             try
             {
                 using SqlConnection con = new(_connectionString);
