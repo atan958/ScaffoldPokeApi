@@ -12,7 +12,7 @@ namespace PokeApiLibrary.Api
     {
         private readonly string _pokemonTypesUrl;
 
-        public PokeApiTypesProcessor(HttpClient client)
+        public PokeApiTypesProcessor()
         {
             _pokemonTypesUrl = "https://pokeapi.co/api/v2/type";
         }

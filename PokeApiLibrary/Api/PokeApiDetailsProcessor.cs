@@ -19,7 +19,7 @@ namespace PokeApiLibrary.Api
         private int startCount = 0;
         private int endCount = 0;
 
-        public PokeApiDetailsProcessor(HttpClient client)
+        public PokeApiDetailsProcessor()
         {
             _pokemonDetailsUrl = "https://pokeapi.co/api/v2/pokemon";
         }

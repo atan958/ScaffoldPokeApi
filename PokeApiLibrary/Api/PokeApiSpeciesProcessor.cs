@@ -12,7 +12,7 @@ namespace PokeApiLibrary.Api
     {
         private readonly string _pokemonSpeciesUrl;
 
-        public PokeApiSpeciesProcessor(HttpClient client)
+        public PokeApiSpeciesProcessor()
         {
             _pokemonSpeciesUrl = "https://pokeapi.co/api/v2/pokemon-species?limit=900";
         }

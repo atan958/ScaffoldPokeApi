@@ -12,7 +12,7 @@ namespace PokeApiLibrary.Api
     {
         private readonly string _pokemonMovesUrl;
 
-        public PokeApiMovesProcessor(HttpClient client)
+        public PokeApiMovesProcessor()
         {
             _pokemonMovesUrl = "https://pokeapi.co/api/v2/move?limit=900";
         }

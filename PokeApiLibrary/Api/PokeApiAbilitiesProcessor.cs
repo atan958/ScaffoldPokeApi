@@ -12,7 +12,7 @@ namespace PokeApiLibrary.Api
     {
         private readonly string _pokemonAbilitiesUrl;
 
-        public PokeApiAbilitiesProcessor(HttpClient client)
+        public PokeApiAbilitiesProcessor()
         {
             _pokemonAbilitiesUrl = "https://pokeapi.co/api/v2/ability";
         }

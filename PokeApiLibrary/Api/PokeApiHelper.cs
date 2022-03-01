@@ -18,8 +18,6 @@ namespace PokeApiLibrary.Api
 {
     public class PokeApiHelper
     {
-        public HttpClient ApiClient { get; set; }
-
         public PokeApiSpeciesProcessor SpeciesProcessor { get; set; }
         public PokeApiMovesProcessor MovesProcessor { get; set; }
         public PokeApiTypesProcessor TypesProcessor { get; set; }
@@ -28,18 +26,11 @@ namespace PokeApiLibrary.Api
 
         public PokeApiHelper() 
         {
-            HttpClientHandler clientHandler = new();
-            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-
-            ApiClient = new HttpClient(clientHandler);
-            ApiClient.DefaultRequestHeaders.Accept.Clear();
-            ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            SpeciesProcessor = new PokeApiSpeciesProcessor(ApiClient);
-            MovesProcessor = new PokeApiMovesProcessor(ApiClient);
-            TypesProcessor = new PokeApiTypesProcessor(ApiClient);
-            DetailsProcessor = new PokeApiDetailsProcessor(ApiClient);
-            AbilitiesProcessor = new PokeApiAbilitiesProcessor(ApiClient);
+            SpeciesProcessor = new PokeApiSpeciesProcessor();
+            MovesProcessor = new PokeApiMovesProcessor();
+            TypesProcessor = new PokeApiTypesProcessor();
+            DetailsProcessor = new PokeApiDetailsProcessor();
+            AbilitiesProcessor = new PokeApiAbilitiesProcessor();
         }
     }
 }
