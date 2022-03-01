@@ -36,7 +36,8 @@ namespace CallExternalApi
             catch (Exception e)
             {
                 Console.WriteLine($"Error in PokemonSpecies: {e.Message}");
-
+                
+                ApiHelper.SpeciesProcessor.ResetClient();
                 pokemonSpeciesInfoList = await ApiHelper.SpeciesProcessor.RetrievePokemonSpeciesInfoListManualAsync();
             }
 
@@ -101,6 +102,7 @@ namespace CallExternalApi
             }
             catch (Exception e)
             {
+                Console.WriteLine($"Error in DetailsMoves: {e.Message}");
                 ApiHelper.DetailsProcessor.ResetClient();
                 pokemonDetailsInfoList = await ApiHelper.DetailsProcessor.RetrievePokemonDetailsInfoListFromIdListManualAsync(pokemonIdList);
             }
@@ -125,7 +127,18 @@ namespace CallExternalApi
         {
             var pokemonIdList = DbHelper.GetPokemonIdList();
 
-            var pokemonDetailsInfoList = await ApiHelper.DetailsProcessor.RetrievePokemonDetailsInfoListFromIdListManualAsync(pokemonIdList);
+            var pokemonDetailsInfoList = new List<PokemonDetailsInfo>();
+
+            try
+            {
+                pokemonDetailsInfoList = await ApiHelper.DetailsProcessor.RetrievePokemonDetailsInfoListFromIdListAsync(pokemonIdList);
+            }
+            catch (Exception e) 
+            {
+                Console.WriteLine($"Error in Details Types: {e.Message}");
+                ApiHelper.DetailsProcessor.ResetClient();
+                pokemonDetailsInfoList = await ApiHelper.DetailsProcessor.RetrievePokemonDetailsInfoListFromIdListManualAsync(pokemonIdList);
+            }
 
             pokemonDetailsInfoList.ForEach(detailsInfo =>
             {
