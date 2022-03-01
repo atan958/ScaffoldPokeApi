@@ -22,6 +22,9 @@ namespace CallExternalApi
             DbHelper = new HanidexDbHelper();
         }
 
+        /*
+         *
+         */
         public async Task TransferPokemonSpeciesDataAsync()
         {
             var pokemonSpeciesInfoList = new List<PokemonSpeciesInfo>();
@@ -32,15 +35,13 @@ namespace CallExternalApi
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine($"Error in PokemonSpecies: {e.Message}");
 
                 pokemonSpeciesInfoList = await ApiHelper.SpeciesProcessor.RetrievePokemonSpeciesInfoListManualAsync();
             }
 
-            var count = 0;
             pokemonSpeciesInfoList.ToList().ForEach(pokemonSpeciesInfo =>
             {
-                Console.WriteLine($"Db Insertion #{count++}");
                 DbHelper.InsertPokemonInfo(pokemonSpeciesInfo);
             });
 
@@ -49,15 +50,15 @@ namespace CallExternalApi
             Console.WriteLine("==================================================================");
         }
 
+        /*
+         *
+         */
         public async Task TransferPokemonMovesDataAsync()
         {
             var pokemonMoveInfoList = await ApiHelper.MovesProcessor.RetrievePokemonMoveInfoListAsync();
 
-            var count = 0;
             pokemonMoveInfoList.ToList().ForEach(moveInfo =>
             {
-                Console.WriteLine(count++);
-
                 moveInfo.Type.Id = ApiHelper.TypesProcessor.GetTypeIdByTypeUrl(moveInfo.Type.Url);
 
                 DbHelper.InsertMoveInfo(moveInfo);
@@ -68,6 +69,9 @@ namespace CallExternalApi
             Console.WriteLine("==================================================================");
         }
 
+        /*
+         *
+         */
         public async Task TransferPokemonTypesDataAsync()
         {
             var pokemonTypesList = await ApiHelper.TypesProcessor.RetrievePokemonTypeInfoListAsync();
@@ -82,22 +86,9 @@ namespace CallExternalApi
             Console.WriteLine("==================================================================");
         }
 
-        public async Task _TransferPokemonSpeciesPokemonMovesJoinDataAsync()
-        {
-            var pokemonMoveInfoList = await ApiHelper.MovesProcessor.RetrievePokemonMoveInfoListAsync();
-
-            pokemonMoveInfoList.ForEach(move =>
-            {
-                Console.WriteLine("========================================");
-                Console.WriteLine($"============={move.Name}=============");
-                Console.WriteLine("========================================");
-                move.Learned_By_Pokemon.ForEach(pokemon =>
-                {
-                    //hanidexDbHelper.InsertPokemonMoveJoin(pokemon, move);
-                });
-            });
-        }
-
+        /*
+         *
+         */
         public async Task TransferPokemonDetailsPokemonMovesJoinDataAsync()
         {
             var pokemonIdList = DbHelper.GetPokemonIdList();
@@ -110,14 +101,12 @@ namespace CallExternalApi
             }
             catch (Exception e)
             {
-                Console.WriteLine($"ERROR in JoinDataAsync: {e.Message}");
                 ApiHelper.DetailsProcessor.ResetClient();
                 pokemonDetailsInfoList = await ApiHelper.DetailsProcessor.RetrievePokemonDetailsInfoListFromIdListManualAsync(pokemonIdList);
             }
 
             pokemonDetailsInfoList.ForEach(detailsInfo =>
             {
-                Console.WriteLine($"Pokemon: {detailsInfo.Name}, #Moves: {detailsInfo.Moves.Count}");
                 detailsInfo.Moves.ForEach(move =>
                 {
                     DbHelper.InsertPokemonMoveJoin(detailsInfo, move.Move);
@@ -129,31 +118,11 @@ namespace CallExternalApi
             Console.WriteLine("==================================================================");
         }
 
-        public async Task _TransferPokemonDetailsDataAsync()
-        {
-            Console.WriteLine("Starting Transfer of Pokemon Details Data");
-
-            var pokemonIdList = DbHelper.GetPokemonIdList();
-
-            var pokemonDetailsInfoList = await ApiHelper.DetailsProcessor.RetrievePokemonDetailsInfoListFromIdListManualAsync(pokemonIdList);
-
-            pokemonDetailsInfoList.ForEach(detailsInfo =>
-            {
-                var moves = detailsInfo.Moves.Select(move =>
-                {
-                    return move.Move.Name;
-                });
-
-            });
-        }
-
         /*
          *
          */
         public async Task TransferPokemonDetailsPokemonTypesJoinDataAsync()
         {
-            Console.WriteLine("Starting Transfer");
-
             var pokemonIdList = DbHelper.GetPokemonIdList();
 
             var pokemonDetailsInfoList = await ApiHelper.DetailsProcessor.RetrievePokemonDetailsInfoListFromIdListManualAsync(pokemonIdList);
@@ -162,8 +131,6 @@ namespace CallExternalApi
             {
                 detailsInfo.Types.ForEach(type =>
                 {
-                    Console.WriteLine($"Inserting {detailsInfo.Name}, {type.Type.Name}");
-
                     DbHelper.InsertPokemonTypeJoin(detailsInfo, type.Type);
                 });
 
@@ -174,16 +141,17 @@ namespace CallExternalApi
             Console.WriteLine("==================================================================");
         }
 
+        /*
+         *
+         */
         public async Task TransferPokemonAbilitiesDataAsync()
         {
             var pokemonAbilityInfoList = await ApiHelper.AbilitiesProcessor.RetrievePokemonAbilityInfoListAsync();
 
             pokemonAbilityInfoList.ForEach(abilityInfo =>
             {
-                Console.WriteLine($"({abilityInfo.Id}) {abilityInfo.Name}");
                 DbHelper.InsertAbilityInfo(abilityInfo);
             });
-            Console.WriteLine($"\nTotal #Abilities: {pokemonAbilityInfoList.Count}");
 
             Console.WriteLine("==================================================================");
             Console.WriteLine($"========================= Pokemon Abilities =========================");
