@@ -22,7 +22,7 @@ namespace PokeApiLibrary.Api
          */
         public async Task<List<PokemonMoveInfo>> RetrievePokemonMoveInfoListAsync()
         {
-            var pokemonMovesList = await RetrievePokemonMovesListAsync();
+            var pokemonMovesList = await RetrievePokemonMoveListAsync();
 
             var otherCount = 0;
             var pokemonMoveInfoTasks = pokemonMovesList.Results.Select(move =>
@@ -40,11 +40,11 @@ namespace PokeApiLibrary.Api
         /*
          *
          */
-        private async Task<PokemonMovesList> RetrievePokemonMovesListAsync()
+        private async Task<PokemonMoveList> RetrievePokemonMoveListAsync()
         {
             using var response = await ApiClient.GetAsync(_pokemonMovesUrl);
 
-            var content = await response.Content.ReadAsAsync<PokemonMovesList>();
+            var content = await response.Content.ReadAsAsync<PokemonMoveList>();
 
             return content;
         }

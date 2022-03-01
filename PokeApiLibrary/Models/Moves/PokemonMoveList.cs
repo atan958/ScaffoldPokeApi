@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PokeApiLibrary.Models.Moves
 {
-    public class PokemonMovesList
+    public class PokemonMoveList
     {
         public int Count { get; set; }
         public List<PokemonMove> Results { get; set; }
